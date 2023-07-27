@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="shadow p-3 w-100 mb-5 bg-body-tertiary rounded">
+
+  {% for cat, msg in get_flashed_messages(True) %}
+  </br>
+    {% if cat == 'error' %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% elif cat == 'success' %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+  {% endfor %}   
+
+  <div class="card" >
+    <h5 class="card-header">Анализатор релевантного года обучения для текста</h5>
+    <div class="card-body">
+      <h5 class="card-title">Предмет: Физика</h5>
+        <form method="POST">
+          <div class="mb-3">
+            <textarea class="form-control" name="text" rows="7" placeholder="Введите текст для анализа..." maxlength="10000" required></textarea>
+          </div> 
+
+          <div class="text-center">
+            <input type="submit" name="submit" id="submit" class="btn btn-primary" value="ПРоВестИ аНалИз &#129309;">
+          </div>
+       </form>
+    </div>
+  </div>
+</div>
+</br>
+{% if data != None %}
+
+<div class="shadow p-3 w-100 mb-5 bg-body-tertiary rounded">
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Текст</th>
+            <th scope="col">Категория</th>
+            <th scope="col">Удаление</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+          <tr>
+            <td>{{ row.text }}</td>
+            <td>{{ row.category }}</td>
+            <td><a href="{{ url_for('delete_text_grade', current_time = row.datetime ) }}" class="btn btn-outline-danger">Удалить</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+      
+</div>
+
+{% endif %}
+
+{% endblock %}
