@@ -58,12 +58,17 @@ def classify_topic():
     data = database.getTopicData(category_type)
 
     if request.method == 'POST':
-        text = request.form.get('text')
-        category = NaiveBayes.classify_topic(text)[0]
-        current_datetime = datetime.now()
-        database.addData(text, category_type, category, current_datetime)
-        flash('Анализ текста сохранен в базе данных', category='success')
-        return redirect(url_for('classify_topic'))
+        if len(data) >= 10:
+            flash('Исчерпан лимит добавления текстов в базу данных', category='error')
+            return redirect(url_for('classify_topic'))
+        
+        elif len(data) < 10:
+            text = request.form.get('text')
+            category = NaiveBayes.classify_topic(text)[0]
+            current_datetime = datetime.now()
+            database.addData(text, category_type, category, current_datetime)
+            flash('Анализ текста сохранен в базе данных', category='success')
+            return redirect(url_for('classify_topic'))
 
 
 
@@ -76,12 +81,17 @@ def classify_grade():
     data = database.getTopicData(category_type)
 
     if request.method == 'POST':
-        text = request.form.get('text')
-        category = NaiveBayes.classify_grade(text)[0]
-        current_datetime = datetime.now()
-        database.addData(text, category_type, category, current_datetime)
-        flash('Анализ текста сохранен в базе данных', category='success')
-        return redirect(url_for('classify_grade'))
+        if len(data) >= 10:
+            flash('Исчерпан лимит добавления текстов в базу данных', category='error')
+            return redirect(url_for('classify_grade'))
+        elif len(data) < 10:  
+
+            text = request.form.get('text')
+            category = NaiveBayes.classify_grade(text)[0]
+            current_datetime = datetime.now()
+            database.addData(text, category_type, category, current_datetime)
+            flash('Анализ текста сохранен в базе данных', category='success')
+            return redirect(url_for('classify_grade'))
 
 
 
